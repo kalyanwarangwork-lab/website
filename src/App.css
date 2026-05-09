@@ -1,0 +1,364 @@
+.magazine-home {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #171510;
+}
+
+.magazine-cover {
+  position: relative;
+  width: min(92vw, calc((100svh - 48px) * 2 / 3), 680px);
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  background: #cfc5b2;
+  box-shadow:
+    0 28px 80px rgba(25, 22, 17, 0.24),
+    0 2px 10px rgba(25, 22, 17, 0.14);
+}
+
+.cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.logo-image{
+  width: 25%;
+  height: 25%;
+}
+
+.magazine-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.2), transparent 26%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.44), transparent 36%);
+}
+
+.logo {
+  position: absolute;
+  z-index: 1;
+  top: clamp(20px, 4vw, 38px);
+  left: clamp(20px, 4vw, 38px);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  max-width: calc(100% - 40px);
+  color: #fffaf1;
+  text-decoration: none;
+}
+
+.logo-mark {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255, 250, 241, 0.76);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 15px;
+  line-height: 1;
+}
+
+.logo-name {
+  width: min-content;
+  min-width: 150px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(16px, 2.2vw, 21px);
+  line-height: 1.08;
+  text-transform: uppercase;
+}
+
+.explore-button {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  bottom: clamp(28px, 6vw, 54px);
+  transform: translateX(-50%);
+  min-width: 144px;
+  padding: 14px 28px;
+  border: 1px solid rgba(255, 250, 241, 0.72);
+  color: #fffaf1;
+  background: rgba(21, 18, 14, 0.42);
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  backdrop-filter: blur(16px);
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.explore-button:hover {
+  background: rgba(255, 250, 241, 0.92);
+  border-color: rgba(255, 250, 241, 0.92);
+  color: #191611;
+  transform: translateX(-50%) translateY(-2px);
+}
+
+.explore-button:focus-visible {
+  outline: 2px solid #fffaf1;
+  outline-offset: 4px;
+}
+
+@media (max-width: 640px) {
+  .magazine-home {
+    padding: 0;
+  }
+
+  .magazine-cover {
+    width: 100vw;
+    height: 100svh;
+    box-shadow: none;
+  }
+
+  .logo-name {
+    min-width: 128px;
+  }
+}
+
+.projects-page {
+  max-height: 100svh;
+  width: 100%;
+  overflow: hidden;
+  background: #0a0a0a;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+}
+
+.projects-desktop-view {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-spread {
+  width: 500px;
+  height: 700px;
+  background: #0a0a0a;
+  color: #ffffff;
+  display: flex;
+}
+
+.project-spread-inner {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: stretch;
+  min-height: 0;
+}
+
+.project-type-panel {
+  display: grid;
+  padding: 10vh;
+  background: #EFECE6;
+  color: #111111;
+  height: 100%;
+  align-items: end;
+  gap: 5vh;
+  grid-template-rows: 5vh 15vh auto;
+}
+
+.breadcrumbs {
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  opacity: 0.5;
+  color: #111111;
+}
+
+.project-type-panel h1 {
+  margin: 0px;
+  max-width: 12ch;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 60px;
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.description {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 48ch;
+  align-self: start;
+}
+
+.project-detail-panel {
+  display: grid;
+  grid-template-rows: max-content 1fr;
+  gap: 16px;
+  padding: 24px;
+  background: #050505;
+  height: 100%;
+  min-height: 0;
+}
+
+.project-heading {
+  max-width: 680px;
+}
+
+.project-heading p {
+  margin: 0 0 14px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.66;
+}
+
+.project-heading h2 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 1.1;
+
+}
+
+.project-image-frame {
+  width: 100%;
+  overflow: hidden;
+  background: #181818;
+  height: 71%;
+  min-height: 0;
+}
+
+.project-image-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.project-bottom-bar {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.project-global-bottom-bar {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  left: auto;
+  z-index: 1000;
+}
+
+.project-controls {
+  display: inline-flex;
+  gap: 10px;
+}
+
+.project-controls button {
+  min-width: 92px;
+  padding: 13px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  color: #ffffff;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.project-controls button:hover {
+  border-color: #ffffff;
+  color: #050505;
+  background: #ffffff;
+}
+
+.project-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+.project-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.project-list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.76);
+  text-decoration: none;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.project-list a[aria-current="page"],
+.project-list a:hover {
+  border-color: rgba(255, 255, 255, 0.72);
+  color: #ffffff;
+}
+
+.project-list span {
+  font-size: 11px;
+  opacity: 0.58;
+}
+
+/* Mobile View Styles */
+.projects-mobile-view {
+  max-height: 100svh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: #0a0a0a;
+}
+
+.projects-mobile-view > div:first-child {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile layout: single column */
+.project-spread-mobile {
+  width: 100%;
+  height: 100%;
+  background: #EFECE6;
+  color: #111111;
+}
+
+.project-spread-inner-mobile {
+ 
+}
+
+.project-type-panel-mobile{}
+
+
+.breadcrumbs-mobile{}
+
+.description-mobile {}
+
+.project-detail-panel-mobile{}
+
+.project-image-frame-mobile{}
