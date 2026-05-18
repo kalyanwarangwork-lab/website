@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@contentful/rich-text-react-renderer": "^16.2.1",
+    "contentful": "^11.12.2",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-pageflip": "^2.0.3"

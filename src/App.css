@@ -169,7 +169,7 @@
   height: 100%;
   align-items: end;
   gap: 5vh;
-  grid-template-rows: 5vh 15vh auto;
+  grid-template-rows: 5vh 15vh 48vh auto;
 }
 
 .breadcrumbs {
@@ -333,12 +333,7 @@
   background: #0a0a0a;
 }
 
-.projects-mobile-view > div:first-child {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+
 
 /* Mobile layout: single column */
 .project-spread-mobile {

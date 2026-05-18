@@ -4,6 +4,8 @@ import { useIsMobile } from './hooks/useIsMobile'
 import { useBookSize } from './hooks/useBookSize'
 import heroImage from './assets/magazine-home.png'
 import detailImage from './assets/hero.png'
+import { client }  from './contentful.js';
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 
 const defaultProjects = [
   {
@@ -42,9 +44,34 @@ function getInitialSlug(projects, initialProjectSlug) {
   return projects[0]?.slug
 }
 
-const ProjectSpread = forwardRef(function ProjectSpread({ project , activeIndex, projectLength}, ref) {
+function getProjects() {
+  let [pages, setPages] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await client.getEntries();
+        console.log('Response', response.items);
+        setPages(response.items.map((item) => ({
+          title: item.fields.title,
+          description: item.fields.description,
+          image: `https:${item.fields.projectImage.fields.file.url}`,
+          slug: item.fields.slug,
+        })));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  console.log('Pages', pages);
+  return pages;
+}
+
+const ProjectSpread = forwardRef(function ProjectSpread({ project , activeIndex, projectLength, isMobile }, ref) {
   console.log('Title', project.title);
-  const isMobile = useIsMobile()
+  
   if (isMobile) {
       return (
         
@@ -78,7 +105,11 @@ const ProjectSpread = forwardRef(function ProjectSpread({ project , activeIndex,
           </p>
           
           <h1>{project.title}</h1>
-          <p className="description">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+          <p className="description">{documentToReactComponents(
+
+          project.description
+
+        )}</p>
           <p className="description">{activeIndex + 1}/{projectLength}</p>
         </section>
 
@@ -94,11 +125,14 @@ const ProjectSpread = forwardRef(function ProjectSpread({ project , activeIndex,
   )
 })
 
-function Projects({ projects = defaultProjects, initialProjectSlug }) {
+function Projects() {/**{ projects = defaultProjects, initialProjectSlug } */
+  const projects = getProjects();
+  console.log('Projects', projects);
+  let initialProjectSlug = null;
   const isMobile = useIsMobile()
   const { width, height } = useBookSize();
-  console.log(width);
-  console.log(height);
+  console.log('WIDTH'+width);
+  console.log('HEIGHT'+height);
   
   const [activeSlug, setActiveSlug] = useState(() =>
     getInitialSlug(projects, initialProjectSlug),
@@ -182,14 +216,14 @@ function Projects({ projects = defaultProjects, initialProjectSlug }) {
       <main className="projects-mobile-view" aria-label="Project details">
         <div className="projects-mobile-view">
           <HTMLFlipBook
-            width={width}
-            height={height}
+            width={400}
+            height={852}
             showCover={false}
             ref={bookRef}
             onFlip={handleFlip}
           >
             {projects.map((project) => (
-              <ProjectSpread key={project.slug} project={project} activeIndex={activeIndex} projectLength={projects.length} />
+              <ProjectSpread key={project.slug} project={project} activeIndex={activeIndex} projectLength={projects.length} isMobile={isMobile} />
             ))}
           </HTMLFlipBook>
         </div>
@@ -216,7 +250,7 @@ function Projects({ projects = defaultProjects, initialProjectSlug }) {
           onFlip={handleFlip}
         >
           {projects.map((project) => (
-            <ProjectSpread key={project.slug} project={project} activeIndex={activeIndex} projectLength={projects.length} />
+            <ProjectSpread key={project.slug} project={project} activeIndex={activeIndex} projectLength={projects.length} isMobile={isMobile} />
           ))}
         </HTMLFlipBook>
       </div>
