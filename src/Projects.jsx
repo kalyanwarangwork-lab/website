@@ -2,34 +2,9 @@ import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'r
 import HTMLFlipBook from 'react-pageflip'
 import { useIsMobile } from './hooks/useIsMobile'
 import { useBookSize } from './hooks/useBookSize'
-import heroImage from './assets/magazine-home.png'
-import detailImage from './assets/hero.png'
 import { client }  from './contentful.js';
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 
-const defaultProjects = [
-  {
-    slug: 'courtyard-residence',
-    type: 'Residential',
-    title: 'Courtyard Residence',
-    image: heroImage,
-    imageAlt: 'Sunlit contemporary residence with stone, wood, and garden views',
-  },
-  {
-    slug: 'layered-interiors',
-    type: 'Interior Design',
-    title: 'Layered Interiors',
-    image: detailImage,
-    imageAlt: 'Layered architectural material composition',
-  },
-  {
-    slug: 'studio-retreat',
-    type: 'Architecture',
-    title: 'Studio Retreat',
-    image: heroImage,
-    imageAlt: 'Warm contemporary studio interior with natural light',
-  },
-]
 
 function getInitialSlug(projects, initialProjectSlug) {
   if (initialProjectSlug) {
@@ -44,13 +19,17 @@ function getInitialSlug(projects, initialProjectSlug) {
   return projects[0]?.slug
 }
 
-function getProjects() {
+function useProjects() {
   let [pages, setPages] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await client.getEntries();
+        const response = await client.getEntries(
+          {
+            content_type: "testContent",
+          }
+        );
         console.log('Response', response.items);
         setPages(response.items.map((item) => ({
           title: item.fields.title,
@@ -125,8 +104,8 @@ const ProjectSpread = forwardRef(function ProjectSpread({ project , activeIndex,
   )
 })
 
-function Projects() {/**{ projects = defaultProjects, initialProjectSlug } */
-  const projects = getProjects();
+function Projects() {
+  const projects = useProjects();
   console.log('Projects', projects);
   let initialProjectSlug = null;
   const isMobile = useIsMobile()
@@ -282,37 +261,23 @@ function ProjectControls({ activeIndex, onGoToProject, projects }) {
           Prev
         </button>
         <button
-          disabled={isLastProject}
+          disabled={projects.length === 0}
           type="button"
           onClick={(event) => {
             event.preventDefault()
             event.stopPropagation()
+
+            if (isLastProject) {
+              window.location.href = '/about'
+              return
+            }
+
             onGoToProject(activeIndex + 1)
           }}
         >
-          Next
+          {isLastProject ? 'About Me' : 'Next'}
         </button>
       </div>
-
-      {isLastProject && (
-        <nav className="project-list" aria-label="Project list">
-          {projects.map((project, projectIndex) => (
-            <a
-              aria-current={projectIndex === activeIndex ? 'page' : undefined}
-              href={`#${project.slug}`}
-              key={project.slug}
-              onClick={(event) => {
-                event.preventDefault()
-                event.stopPropagation()
-                onGoToProject(projectIndex)
-              }}
-            >
-              <span>{String(projectIndex + 1).padStart(2, '0')}</span>
-              {project.title}
-            </a>
-          ))}
-        </nav>
-      )}
     </div>
   )
 }

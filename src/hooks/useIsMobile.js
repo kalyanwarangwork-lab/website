@@ -1,22 +1,24 @@
 import { useState, useEffect } from 'react'
 
+function getIsMobile(breakpoint) {
+  if (typeof window === 'undefined') {
+    return false
+  }
+
+  return window.innerWidth < breakpoint
+}
+
 export function useIsMobile(breakpoint = 768) {
-  const [isMobile, setIsMobile] = useState(false)
-  const [isHydrated, setIsHydrated] = useState(false)
+  const [isMobile, setIsMobile] = useState(() => getIsMobile(breakpoint))
 
   useEffect(() => {
-    // Set initial state on client mount
-    setIsMobile(window.innerWidth < breakpoint)
-    setIsHydrated(true)
-
     const handleResize = () => {
-      setIsMobile(window.innerWidth < breakpoint)
+      setIsMobile(getIsMobile(breakpoint))
     }
 
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [breakpoint])
 
-  // Return false until hydrated to avoid mismatch
-  return isHydrated ? isMobile : false
+  return isMobile
 }
