@@ -1,24 +1,27 @@
+import { useState, useEffect } from 'react'
 import Home from './Home.jsx'
 import Projects from './Projects.jsx'
 import AboutUs from './AboutUs.jsx'
 import './App.css'
 
-const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+function getRoute() {
+  const hash = window.location.hash.slice(1)
+  if (hash === 'about') return 'about'
+  if (hash) return 'projects'
+  return 'home'
+}
 
 function App() {
-  const pathname = window.location.pathname
+  const [route, setRoute] = useState(getRoute)
 
-  if (
-    pathname.startsWith(base + '/about') ||
-    pathname.startsWith(base + '/about-us')
-  ) {
-    return <AboutUs />
-  }
+  useEffect(() => {
+    const onChange = () => setRoute(getRoute())
+    window.addEventListener('hashchange', onChange)
+    return () => window.removeEventListener('hashchange', onChange)
+  }, [])
 
-  if (pathname.startsWith(base + '/projects')) {
-    return <Projects />
-  }
-
+  if (route === 'about') return <AboutUs />
+  if (route === 'projects') return <Projects />
   return <Home />
 }
 

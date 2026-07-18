@@ -144,16 +144,16 @@ const AboutUsLastPage = forwardRef(function AboutUsLastPage({ aboutPage, project
         </section>
 
         <nav className="about-projects" aria-label="View projects">
-          <a className="about-cover-link" href={import.meta.env.BASE_URL}>
+          <a className="about-cover-link" href="#">
             Go to cover page
           </a>
-          <a className="about-projects-trigger" href={`${import.meta.env.BASE_URL}projects`}>
+          <a className="about-projects-trigger" href="#projects">
             View Projects
           </a>
           <div className="about-projects-menu">
             {projects.map((project, i) => (
               <a
-                href={`${import.meta.env.BASE_URL}projects#${encodeURIComponent(project.slug)}`}
+                href={`#${encodeURIComponent(project.slug)}`}
                 key={project.slug}
                 onClick={(e) => { e.preventDefault(); onGoToProject(i) }}
               >
@@ -365,11 +365,10 @@ function Projects() {
 
   useEffect(() => {
     if (typeof window === 'undefined' || !selectedSlug) return
-    const base = import.meta.env.BASE_URL.replace(/\/$/, '')
     if (selectedSlug === ABOUT_SLUG) {
-      window.history.replaceState(null, '', `${base}/about`)
+      window.history.replaceState(null, '', '#about')
     } else {
-      window.history.replaceState(null, '', `${base}/projects#${encodeURIComponent(selectedSlug)}`)
+      window.history.replaceState(null, '', `#${encodeURIComponent(selectedSlug)}`)
     }
   }, [selectedSlug])
 
