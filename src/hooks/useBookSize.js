@@ -1,31 +1,14 @@
 import { useEffect, useState } from "react";
 
 export function useBookSize() {
-  const [size, setSize] = useState({
-    width: 1470,
-    height: 956,
-  });
+  const [size, setSize] = useState(() => ({
+    width: typeof window !== 'undefined' ? window.innerWidth : 1470,
+    height: typeof window !== 'undefined' ? window.innerHeight : 956,
+  }));
 
   useEffect(() => {
     function updateSize() {
-      const isMobile = window.innerWidth <= 768;
-
-      if (isMobile) {
-        // MOBILE
-        const width = window.innerWidth ;
-        const height = window.innerHeight ;
-
-        setSize({ width, height });
-      } else {
-        console.log("inner height", window.innerHeight);
-        console.log("inner width", window.innerWidth);
-        // DESKTOP
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-
-
-        setSize({ width, height });
-      }
+      setSize({ width: window.innerWidth, height: window.innerHeight });
     }
 
     updateSize();

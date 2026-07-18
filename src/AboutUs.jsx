@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useCallback, useState } from 'react'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import websiteLogo from './assets/website_logo2.png'
 import { client } from './contentful.js'
@@ -36,7 +36,6 @@ function AboutUs() {
           }),
           client.getEntries({
             content_type: PROJECT_CONTENT_TYPE,
-            select: 'fields.title,fields.slug',
           }),
         ])
 
@@ -54,6 +53,8 @@ function AboutUs() {
             .map((item) => ({
               title: item.fields.title,
               slug: item.fields.slug,
+              description: item.fields.description,
+              image: `https:${item.fields.projectImage.fields.file.url}`,
             }))
             .filter((project) => project.title && project.slug),
         )
@@ -121,7 +122,7 @@ function AboutUs() {
             {projectsStatus === 'error' && <p>Unable to load projects.</p>}
             {projectsStatus === 'ready' &&
               projects.map((project, projectIndex) => (
-                <a href={`/projects#${project.slug}`} key={project.slug}>
+                <a href={`/projects#${encodeURIComponent(project.slug)}`} key={project.slug}>
                   <span>{String(projectIndex + 1).padStart(2, '0')}</span>
                   {project.title}
                 </a>

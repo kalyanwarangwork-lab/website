@@ -4,7 +4,6 @@ function getIsMobile(breakpoint) {
   if (typeof window === 'undefined') {
     return false
   }
-
   return window.innerWidth < breakpoint
 }
 
