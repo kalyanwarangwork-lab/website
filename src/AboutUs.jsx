@@ -101,7 +101,7 @@ function AboutUs() {
         </section>
 
         <section className="about-detail-panel" aria-label="Studio identity">
-          <a className="about-logo" href="/" aria-label="Ishwari Jadhav Architecture">
+          <a className="about-logo" href={import.meta.env.BASE_URL} aria-label="Ishwari Jadhav Architecture">
             <img
               className="about-logo-image"
               src={websiteLogo}
@@ -111,10 +111,10 @@ function AboutUs() {
         </section>
 
         <nav className="about-projects" aria-label="View projects">
-          <a className="about-cover-link" href="/">
+          <a className="about-cover-link" href={import.meta.env.BASE_URL}>
             Go to cover page
           </a>
-          <a className="about-projects-trigger" href="/projects">
+          <a className="about-projects-trigger" href={`${import.meta.env.BASE_URL}projects`}>
             View Projects
           </a>
           <div className="about-projects-menu">
@@ -122,7 +122,7 @@ function AboutUs() {
             {projectsStatus === 'error' && <p>Unable to load projects.</p>}
             {projectsStatus === 'ready' &&
               projects.map((project, projectIndex) => (
-                <a href={`/projects#${encodeURIComponent(project.slug)}`} key={project.slug}>
+                <a href={`${import.meta.env.BASE_URL}projects#${encodeURIComponent(project.slug)}`} key={project.slug}>
                   <span>{String(projectIndex + 1).padStart(2, '0')}</span>
                   {project.title}
                 </a>

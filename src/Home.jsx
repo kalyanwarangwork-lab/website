@@ -19,7 +19,7 @@ function Home() {
           />
         </a>
 
-        <a className="explore-button" href="/projects">
+        <a className="explore-button" href={`${import.meta.env.BASE_URL}projects`}>
           Explore
         </a>
       </section>
