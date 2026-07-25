@@ -691,21 +691,21 @@
 }
 
 /* Mobile View Styles */
-@keyframes flip-exit-next {
-  from { transform: rotateY(0deg); }
-  to   { transform: rotateY(-90deg); }
+@keyframes slide-exit-next {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
 }
-@keyframes flip-enter-next {
-  from { transform: rotateY(90deg); }
-  to   { transform: rotateY(0deg); }
+@keyframes slide-enter-next {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
 }
-@keyframes flip-exit-prev {
-  from { transform: rotateY(0deg); }
-  to   { transform: rotateY(90deg); }
+@keyframes slide-exit-prev {
+  from { transform: translateX(0); }
+  to   { transform: translateX(100%); }
 }
-@keyframes flip-enter-prev {
-  from { transform: rotateY(-90deg); }
-  to   { transform: rotateY(0deg); }
+@keyframes slide-enter-prev {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
 }
 
 .projects-mobile-view {
@@ -723,7 +723,6 @@
   min-height: 0;
   position: relative;
   overflow: hidden;
-  perspective: 1200px;
 }
 
 .project-spread-mobile {
@@ -734,24 +733,19 @@
   background: #efece6;
   color: #111111;
   overflow-y: auto;
-  backface-visibility: hidden;
 }
 
 .mobile-exit-next {
-  transform-origin: left center;
-  animation: flip-exit-next 0.25s ease-in forwards;
+  animation: slide-exit-next 0.38s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 .mobile-enter-next {
-  transform-origin: left center;
-  animation: flip-enter-next 0.25s ease-out 0.25s both;
+  animation: slide-enter-next 0.38s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 .mobile-exit-prev {
-  transform-origin: right center;
-  animation: flip-exit-prev 0.25s ease-in forwards;
+  animation: slide-exit-prev 0.38s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 .mobile-enter-prev {
-  transform-origin: right center;
-  animation: flip-enter-prev 0.25s ease-out 0.25s both;
+  animation: slide-enter-prev 0.38s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .project-header-mobile {

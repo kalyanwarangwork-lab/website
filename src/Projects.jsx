@@ -242,7 +242,7 @@ function MobileAboutCard({ aboutPage, onGoToProject, className }) {
 }
 
 function MobileView({ activeIndex, slideDirection, projects, aboutPage, onGoToProject }) {
-  const DURATION = 500
+  const DURATION = 400
   const [transition, setTransition] = useState({ current: activeIndex, prev: null })
 
   useEffect(() => {
@@ -270,10 +270,12 @@ function MobileView({ activeIndex, slideDirection, projects, aboutPage, onGoToPr
     )
   }
 
+  const isAnimating = transition.prev !== null
+
   return (
     <div className="mobile-flip-container">
-      {transition.prev !== null && renderCard(transition.prev, `mobile-exit-${slideDirection}`)}
-      {renderCard(transition.current, `mobile-enter-${slideDirection}`)}
+      {isAnimating && renderCard(transition.prev, `mobile-exit-${slideDirection}`)}
+      {renderCard(transition.current, isAnimating ? `mobile-enter-${slideDirection}` : '')}
     </div>
   )
 }
