@@ -1,109 +1,105 @@
-.magazine-home {
-  position: relative;
+/* ── Home page (cover spread) ── */
+.home-spread {
+  width: 100vw;
   height: 100svh;
   overflow: hidden;
-  background: #171510;
+  background: #0a0a0a;
 }
 
-.magazine-cover {
-  position: absolute;
-  inset: 0;
-  background: #cfc5b2;
+.home-spread-inner {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
-.cover-image {
+.home-type-panel {
+  display: grid;
+  padding: 10vh 10%;
+  background: #efece6;
+  color: #111111;
+  gap: 5vh;
+  grid-template-rows: auto 1fr auto;
+}
+
+.home-logo-image {
+  width: clamp(120px, 55%, 240px);
+  height: auto;
+  align-self: center;
+}
+
+.home-footer {
+  display: flex;
+  align-items: center;
+}
+
+.home-explore-button {
+  display: inline-block;
+  min-width: 120px;
+  padding: 14px 28px;
+  border: 1px solid rgba(17, 17, 17, 0.36);
+  background: transparent;
+  color: #111111;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.home-explore-button:hover {
+  background: rgba(17, 17, 17, 0.06);
+}
+
+.home-detail-panel {
+  background: #050505;
+  height: 100%;
+  overflow: hidden;
+}
+
+.home-cover-image {
   width: 100%;
   height: 100%;
+  display: block;
   object-fit: cover;
   object-position: center;
 }
 
-.logo-image {
-  width: clamp(80px, 14vw, 160px);
-  height: auto;
-}
+/* Mobile home */
+@media (max-width: 768px) {
+  .home-spread-inner {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    overflow-y: auto;
+  }
 
-.magazine-cover::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.2), transparent 26%),
-    linear-gradient(0deg, rgba(0, 0, 0, 0.44), transparent 36%);
-}
+  .home-type-panel {
+    grid-row: 3;
+    padding: 16px 16px 24px;
+    gap: 20px;
+    grid-template-rows: unset;
+  }
 
-.logo {
-  position: absolute;
-  z-index: 1;
-  top: clamp(20px, 4vw, 38px);
-  left: clamp(20px, 4vw, 38px);
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  max-width: calc(100% - 40px);
-  color: #fffaf1;
-  text-decoration: none;
-}
+  .home-logo-image {
+    width: clamp(100px, 50%, 180px);
+    align-self: unset;
+  }
 
-.logo-mark {
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  border: 1px solid rgba(255, 250, 241, 0.76);
-  font-size: 15px;
-  line-height: 1;
-}
+  .home-detail-panel {
+    grid-row: 1;
+    height: 60svh;
+  }
 
-.logo-name {
-  width: min-content;
-  min-width: 150px;
-  font-size: clamp(16px, 2.2vw, 21px);
-  line-height: 1.08;
-  text-transform: uppercase;
-}
-
-.explore-button {
-  position: absolute;
-  z-index: 1;
-  left: 50%;
-  bottom: clamp(28px, 6vw, 54px);
-  transform: translateX(-50%);
-  min-width: 144px;
-  padding: 14px 28px;
-  border: 1px solid rgba(255, 250, 241, 0.72);
-  color: #fffaf1;
-  background: rgba(21, 18, 14, 0.42);
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  text-transform: uppercase;
-  font: inherit;
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1;
-  backdrop-filter: blur(16px);
-  transition:
-    background-color 180ms ease,
-    border-color 180ms ease,
-    transform 180ms ease;
-}
-
-.explore-button:hover {
-  background: rgba(255, 250, 241, 0.92);
-  border-color: rgba(255, 250, 241, 0.92);
-  color: #191611;
-  transform: translateX(-50%) translateY(-2px);
-}
-
-.explore-button:focus-visible {
-  outline: 2px solid #fffaf1;
-  outline-offset: 4px;
+  .home-footer {
+    grid-row: unset;
+  }
 }
 
 .about-page {
-  min-height: 100svh;
+  height: 100svh;
   width: 100%;
   overflow: hidden;
   background: #0a0a0a;
@@ -115,7 +111,7 @@
 .about-spread {
   position: relative;
   width: 100%;
-  height: 100svh;
+  height: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
@@ -152,7 +148,7 @@
 
 .about-type-panel h1 {
   margin: 0;
-  font-size: 60px;
+  font-size: clamp(32px, 8vh, 60px);
   font-weight: 400;
   line-height: 1.05;
 }
@@ -312,20 +308,6 @@
 }
 
 @media (max-width: 640px) {
-  .magazine-home {
-    padding: 0;
-  }
-
-  .magazine-cover {
-    width: 100vw;
-    height: 100svh;
-    box-shadow: none;
-  }
-
-  .logo-name {
-    min-width: 128px;
-  }
-
   .about-page {
     min-height: 100svh;
   }
@@ -441,8 +423,8 @@
 }
 
 .project-spread {
-  width: 500px;
-  height: 700px;
+  width: 100%;
+  height: 100%;
   background: #0a0a0a;
   color: #ffffff;
   display: flex;
@@ -508,7 +490,7 @@
 
 .project-type-panel h1 {
   margin: 0px;
-  font-size: 60px;
+  font-size: clamp(32px, 8vh, 60px);
   font-weight: 400;
   line-height: 1.05;
 }
