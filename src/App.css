@@ -971,6 +971,29 @@
   white-space: nowrap;
 }
 
+@media (max-width: 768px) {
+  .image-preview-content {
+    max-width: 100vw;
+    gap: 0;
+  }
+  .preview-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+  }
+  .preview-nav.preview-prev {
+    left: 8px;
+  }
+  .preview-nav.preview-next {
+    right: 8px;
+  }
+  .preview-image {
+    max-width: 100vw;
+    max-height: 80vh;
+  }
+}
+
 .project-counter-mobile {
   margin: 0;
   font-size: 12px;
