@@ -282,8 +282,8 @@ function MobileProjectCard({ project, index, projectLength, activeIndex, onGoToP
         <img src={project.image} alt={project.imageAlt} />
       </div>
       <div className="project-body-mobile">
-        <div className="description-mobile">{renderRichText(project.description)}</div>
         <CollageSlider images={project.collageImages} columns={2} />
+        <div className="description-mobile">{renderRichText(project.description)}</div>
         <div className="project-page-footer-mobile">
           <span className="project-counter-mobile">{index + 1}/{projectLength}</span>
           <div className="project-page-nav-mobile">
