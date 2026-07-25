@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { forwardRef, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import HTMLFlipBook from 'react-pageflip'
 import { useIsMobile } from './hooks/useIsMobile'
 import { useBookSize } from './hooks/useBookSize'
@@ -54,9 +54,14 @@ function useProjects() {
           title: item.fields.title,
           location: item.fields.location || null,
           description: item.fields.description,
-          image: `https:${item.fields.projectImage.fields.file.url}`,
+          image: `https:${item.fields.projectImage.fields.file.url}?w=1400&fm=webp&q=80`,
           imageAlt: item.fields.projectImage.fields.description || item.fields.title,
           slug: item.fields.slug,
+          collageImages: (item.fields.collageImages || []).map((img) => ({
+            url: `https:${img.fields.file.url}?w=1400&fm=webp&q=82`,
+            thumbUrl: `https:${img.fields.file.url}?w=400&h=400&fit=thumb&fm=webp&q=75`,
+            alt: img.fields.description || img.fields.title || '',
+          })),
         })));
       } catch (error) {
         console.error(error);
@@ -181,6 +186,86 @@ function ProjectsHeader() {
   )
 }
 
+function ImagePreview({ images, initialIndex, onClose }) {
+  const [index, setIndex] = useState(initialIndex)
+
+  useEffect(() => {
+    function handleKey(e) {
+      if (e.key === 'ArrowLeft') setIndex(i => Math.max(0, i - 1))
+      if (e.key === 'ArrowRight') setIndex(i => Math.min(images.length - 1, i + 1))
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [images.length, onClose])
+
+  return (
+    <div className="image-preview-overlay" onClick={onClose}>
+      <div className="image-preview-content" onClick={e => e.stopPropagation()}>
+        <button className="preview-close" onClick={onClose} aria-label="Close preview">×</button>
+        <button
+          className="preview-nav preview-prev"
+          onClick={() => setIndex(i => i - 1)}
+          disabled={index === 0}
+          aria-label="Previous image"
+        >‹</button>
+        <img className="preview-image" src={images[index].url} alt={images[index].alt} />
+        <button
+          className="preview-nav preview-next"
+          onClick={() => setIndex(i => i + 1)}
+          disabled={index === images.length - 1}
+          aria-label="Next image"
+        >›</button>
+        <p className="preview-counter">{index + 1} / {images.length}</p>
+      </div>
+    </div>
+  )
+}
+
+function CollageSlider({ images, columns = 3 }) {
+  const [startIndex, setStartIndex] = useState(0)
+  const [previewIndex, setPreviewIndex] = useState(null)
+
+  if (!images || images.length === 0) return null
+
+  const canPrev = startIndex > 0
+  const canNext = startIndex + columns < images.length
+
+  return (
+    <>
+      <div className="collage-slider">
+        <button
+          className="collage-slider-arrow"
+          onClick={() => setStartIndex(i => Math.max(0, i - 1))}
+          disabled={!canPrev}
+          aria-label="Previous images"
+        >‹</button>
+        <div className="collage-slider-track" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
+          {images.slice(startIndex, startIndex + columns).map((img, i) => (
+            <button
+              key={startIndex + i}
+              className="collage-thumb"
+              onClick={() => setPreviewIndex(startIndex + i)}
+              aria-label={`View image ${startIndex + i + 1}`}
+            >
+              <img src={img.thumbUrl || img.url} alt={img.alt} />
+            </button>
+          ))}
+        </div>
+        <button
+          className="collage-slider-arrow"
+          onClick={() => setStartIndex(i => Math.min(images.length - columns, i + 1))}
+          disabled={!canNext}
+          aria-label="Next images"
+        >›</button>
+      </div>
+      {previewIndex !== null && (
+        <ImagePreview images={images} initialIndex={previewIndex} onClose={() => setPreviewIndex(null)} />
+      )}
+    </>
+  )
+}
+
 function MobileProjectCard({ project, index, projectLength, activeIndex, onGoToProject, className }) {
   const isFirst = activeIndex === 0
   const isLast = activeIndex === projectLength - 1
@@ -198,6 +283,7 @@ function MobileProjectCard({ project, index, projectLength, activeIndex, onGoToP
       </div>
       <div className="project-body-mobile">
         <div className="description-mobile">{renderRichText(project.description)}</div>
+        <CollageSlider images={project.collageImages} columns={2} />
         <div className="project-page-footer-mobile">
           <span className="project-counter-mobile">{index + 1}/{projectLength}</span>
           <div className="project-page-nav-mobile">
@@ -280,13 +366,9 @@ function MobileView({ activeIndex, slideDirection, projects, aboutPage, onGoToPr
   )
 }
 
-const ProjectSpread = forwardRef(function ProjectSpread({ project, index, projectLength, isMobile, activeIndex, onGoToProject }, ref) {
-  if (isMobile) {
-    return null
-  }
-
-  const isFirst = activeIndex === 0
-  const isLast = activeIndex === projectLength - 1
+const ProjectSpread = memo(forwardRef(function ProjectSpread({ project, index, projectLength, onGoToProject }, ref) {
+  const isFirst = index === 0
+  const isLast = index === projectLength - 1
 
   return (
     <article className="project-spread" ref={ref}>
@@ -303,19 +385,20 @@ const ProjectSpread = forwardRef(function ProjectSpread({ project, index, projec
             <div className="description">
               {renderRichText(project.description)}
             </div>
+            <CollageSlider images={project.collageImages} columns={3} />
             <div className="project-page-footer">
               <span className="project-counter">{index + 1}/{projectLength}</span>
               <div className="project-page-nav">
                 <button
                   type="button"
                   disabled={isFirst}
-                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); onGoToProject(activeIndex - 1) }}
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); onGoToProject(index - 1) }}
                 >
                   Prev
                 </button>
                 <button
                   type="button"
-                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); onGoToProject(activeIndex + 1) }}
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); onGoToProject(index + 1) }}
                 >
                   {isLast ? 'Know About Me' : 'Next'}
                 </button>
@@ -332,7 +415,7 @@ const ProjectSpread = forwardRef(function ProjectSpread({ project, index, projec
       </div>
     </article>
   )
-})
+}))
 
 function Projects() {
   const { pages: projects, ready } = useProjects();
@@ -346,6 +429,8 @@ function Projects() {
   const bookRef = useRef()
   const touchStartX = useRef(0)
   const touchStartY = useRef(0)
+  const activeIndexRef = useRef(0)
+  const isMobileRef = useRef(isMobile)
 
   const selectedSlug = useMemo(() => {
     if (activeSlug === ABOUT_SLUG) return ABOUT_SLUG
@@ -378,6 +463,19 @@ function Projects() {
     }
   }, [activeIndex, projects.length])
 
+  useEffect(() => { activeIndexRef.current = activeIndex }, [activeIndex])
+  useEffect(() => { isMobileRef.current = isMobile }, [isMobile])
+
+  // Preload adjacent page images so the next flip doesn't wait on network
+  useEffect(() => {
+    if (projects.length === 0) return
+    const srcs = [
+      projects[activeIndex - 1]?.image,
+      projects[activeIndex + 1]?.image,
+    ].filter(Boolean)
+    srcs.forEach((src) => { new Image().src = src })
+  }, [activeIndex, projects])
+
   useEffect(() => {
     if (typeof window === 'undefined' || !selectedSlug) return
     if (selectedSlug === ABOUT_SLUG) {
@@ -405,11 +503,14 @@ function Projects() {
   )
 
   const goToProject = useCallback(
-    (index) => {
-      setSlideDirection(index >= activeIndex ? 'next' : 'prev')
+    (targetIndex) => {
+      const currentIndex = activeIndexRef.current
+      if (isMobileRef.current) {
+        setSlideDirection(targetIndex >= currentIndex ? 'next' : 'prev')
+      }
       const pageFlip = bookRef.current?.pageFlip?.()
 
-      if (index >= projects.length) {
+      if (targetIndex >= projects.length) {
         if (pageFlip) {
           pageFlip.flipNext('bottom')
         } else {
@@ -418,19 +519,19 @@ function Projects() {
         return
       }
 
-      const nextIndex = Math.min(Math.max(index, 0), projects.length - 1)
+      const nextIndex = Math.min(Math.max(targetIndex, 0), projects.length - 1)
 
       if (!pageFlip) {
         setActiveProject(nextIndex)
         return
       }
 
-      if (nextIndex === activeIndex + 1) {
+      if (nextIndex === currentIndex + 1) {
         pageFlip.flipNext('bottom')
         return
       }
 
-      if (nextIndex === activeIndex - 1) {
+      if (nextIndex === currentIndex - 1) {
         pageFlip.flipPrev('bottom')
         return
       }
@@ -438,7 +539,7 @@ function Projects() {
       setActiveProject(nextIndex)
       pageFlip.turnToPage(nextIndex)
     },
-    [activeIndex, projects.length, setActiveProject],
+    [projects.length, setActiveProject],
   )
 
   const handleFlip = useCallback(
@@ -457,10 +558,11 @@ function Projects() {
     const deltaX = e.changedTouches[0].clientX - touchStartX.current
     const deltaY = e.changedTouches[0].clientY - touchStartY.current
     if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
-      if (deltaX < 0) goToProject(activeIndex + 1)
-      else goToProject(activeIndex - 1)
+      const current = activeIndexRef.current
+      if (deltaX < 0) goToProject(current + 1)
+      else goToProject(current - 1)
     }
-  }, [activeIndex, goToProject])
+  }, [goToProject])
 
   if (!ready) {
     return <main className="projects-loading" aria-label="Loading projects" />
@@ -500,7 +602,7 @@ function Projects() {
           useMouseEvents={false}
         >
           {projects.map((project, index) => (
-            <ProjectSpread key={project.slug} project={project} index={index} projectLength={projects.length} isMobile={false} activeIndex={activeIndex} onGoToProject={goToProject} />
+            <ProjectSpread key={project.slug} project={project} index={index} projectLength={projects.length} onGoToProject={goToProject} />
           ))}
           <AboutUsLastPage aboutPage={aboutPage} projects={projects} isMobile={false} onGoToProject={goToProject} />
         </HTMLFlipBook>
