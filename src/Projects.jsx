@@ -168,6 +168,19 @@ const AboutUsLastPage = forwardRef(function AboutUsLastPage({ aboutPage, project
   )
 })
 
+function ProjectsHeader() {
+  return (
+    <header className="projects-header">
+      <a href="#" className="projects-header-logo" aria-label="Ishwari Jadhav Architecture">
+        <img src={websiteLogo} alt="Ishwari Jadhav Architecture" />
+      </a>
+      <a href="#" className="projects-header-cover-link">
+        Go to cover page
+      </a>
+    </header>
+  )
+}
+
 function MobileProjectCard({ project, index, projectLength, activeIndex, onGoToProject, className }) {
   const isFirst = activeIndex === 0
   const isLast = activeIndex === projectLength - 1
@@ -459,6 +472,7 @@ function Projects() {
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
+        <ProjectsHeader />
         <MobileView
           activeIndex={activeIndex}
           slideDirection={slideDirection}
@@ -472,6 +486,7 @@ function Projects() {
 
   return (
     <main className="projects-page" aria-label="Project details">
+      <ProjectsHeader />
       <div className="projects-desktop-view">
         <HTMLFlipBook
           width={width}
