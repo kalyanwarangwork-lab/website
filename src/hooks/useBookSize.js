@@ -4,9 +4,11 @@ const HEADER_HEIGHT = 60
 
 function getSize() {
   if (typeof window === 'undefined') return { width: 1470, height: 896 }
+  const h = window.innerHeight
+  document.documentElement.style.setProperty('--app-height', `${h}px`)
   return {
     width: window.innerWidth,
-    height: window.innerHeight - HEADER_HEIGHT,
+    height: h - HEADER_HEIGHT,
   }
 }
 

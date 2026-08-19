@@ -366,13 +366,14 @@ function MobileView({ activeIndex, slideDirection, projects, aboutPage, onGoToPr
   )
 }
 
-const ProjectSpread = memo(forwardRef(function ProjectSpread({ project, index, projectLength, onGoToProject }, ref) {
+const ProjectSpread = memo(forwardRef(function ProjectSpread({ project, index, projectLength, onGoToProject, pageHeight }, ref) {
   const isFirst = index === 0
   const isLast = index === projectLength - 1
+  const heightStyle = pageHeight ? { height: pageHeight } : undefined
 
   return (
-    <article className="project-spread" ref={ref}>
-      <div className="project-spread-inner">
+    <article className="project-spread" ref={ref} style={heightStyle}>
+      <div className="project-spread-inner" style={heightStyle}>
         <section className="project-type-panel">
           <p className="breadcrumbs">Project Details
             <span aria-hidden="true" />
@@ -407,7 +408,7 @@ const ProjectSpread = memo(forwardRef(function ProjectSpread({ project, index, p
           </div>
         </section>
 
-        <section className="project-detail-panel">
+        <section className="project-detail-panel" style={heightStyle}>
           <div className="project-image-frame">
             <img src={project.image} alt={project.imageAlt} />
           </div>
@@ -602,7 +603,7 @@ function Projects() {
           useMouseEvents={false}
         >
           {projects.map((project, index) => (
-            <ProjectSpread key={project.slug} project={project} index={index} projectLength={projects.length} onGoToProject={goToProject} />
+            <ProjectSpread key={project.slug} project={project} index={index} projectLength={projects.length} onGoToProject={goToProject} pageHeight={height} />
           ))}
           <AboutUsLastPage aboutPage={aboutPage} projects={projects} isMobile={false} onGoToProject={goToProject} />
         </HTMLFlipBook>
