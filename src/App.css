@@ -366,6 +366,7 @@
 }
 
 .projects-page {
+  position: relative;
   height: var(--app-height, 100vh);
   width: 100%;
   overflow: hidden;
@@ -376,11 +377,13 @@
 }
 
 .projects-desktop-view {
+  position: relative;
   flex: 1;
   min-height: 0;
+  overflow: hidden;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
 .projects-header {
