@@ -596,6 +596,8 @@ function Projects() {
         <HTMLFlipBook
           width={width}
           height={height}
+          size="fixed"
+          autoSize={false}
           showCover={false}
           startPage={activeIndex}
           ref={bookRef}
