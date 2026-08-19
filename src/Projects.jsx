@@ -598,6 +598,7 @@ function Projects() {
           height={height}
           size="fixed"
           autoSize={false}
+          usePortrait={false}
           showCover={false}
           startPage={activeIndex}
           ref={bookRef}
