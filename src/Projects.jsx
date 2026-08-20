@@ -511,33 +511,21 @@ function Projects() {
       }
       const pageFlip = bookRef.current?.pageFlip?.()
 
-      if (targetIndex >= projects.length) {
-        if (pageFlip) {
-          pageFlip.flipNext('bottom')
-        } else {
-          setActiveProject(projects.length)
-        }
-        return
-      }
-
-      const nextIndex = Math.min(Math.max(targetIndex, 0), projects.length - 1)
+      const nextIndex = targetIndex >= projects.length
+        ? projects.length
+        : Math.min(Math.max(targetIndex, 0), projects.length - 1)
 
       if (!pageFlip) {
         setActiveProject(nextIndex)
         return
       }
 
-      if (nextIndex === currentIndex + 1) {
-        pageFlip.flipNext('bottom')
+      if (nextIndex >= projects.length) {
+        setActiveProject(projects.length)
+        pageFlip.turnToPage(projects.length)
         return
       }
 
-      if (nextIndex === currentIndex - 1) {
-        pageFlip.flipPrev('bottom')
-        return
-      }
-
-      setActiveProject(nextIndex)
       pageFlip.turnToPage(nextIndex)
     },
     [projects.length, setActiveProject],
