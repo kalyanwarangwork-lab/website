@@ -604,7 +604,7 @@ function Projects() {
           ref={bookRef}
           onFlip={handleFlip}
           useMouseEvents={false}
-        >
+        > 
           {projects.map((project, index) => (
             <ProjectSpread key={project.slug} project={project} index={index} projectLength={projects.length} onGoToProject={goToProject} pageHeight={height} />
           ))}
