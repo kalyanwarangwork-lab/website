@@ -526,6 +526,17 @@ function Projects() {
         return
       }
 
+      if (nextIndex === currentIndex + 1) {
+        pageFlip.flipNext('bottom')
+        return
+      }
+
+      if (nextIndex === currentIndex - 1) {
+        pageFlip.flipPrev('bottom')
+        return
+      }
+
+      setActiveProject(nextIndex)
       pageFlip.turnToPage(nextIndex)
     },
     [projects.length, setActiveProject],
@@ -586,7 +597,7 @@ function Projects() {
           height={height}
           size="fixed"
           autoSize={false}
-          usePortrait={false}
+          usePortrait={true}
           showCover={false}
           startPage={activeIndex}
           ref={bookRef}
