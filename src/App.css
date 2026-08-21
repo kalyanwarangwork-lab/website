@@ -425,24 +425,6 @@
   height: 100%;
 }
 
-.about-type-panel.about-type-panel--split {
-  grid-template-rows: auto auto 1fr auto;
-}
-
-.about-split-nav {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  align-items: end;
-}
-
-.about-projects-menu.about-projects-menu--split {
-  left: 0;
-  width: 100%;
-  max-height: min(40vh, 320px);
-}
-
 .project-spread {
   width: 100%;
   height: calc(var(--app-height, 100vh) - 60px);
