@@ -8,7 +8,7 @@ function getSize() {
   document.documentElement.style.setProperty('--app-height', `${h}px`)
   return {
     width: window.innerWidth,
-    height: h - HEADER_HEIGHT,
+    height: h //- HEADER_HEIGHT,
   }
 }
 
