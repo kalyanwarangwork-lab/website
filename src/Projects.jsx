@@ -423,6 +423,7 @@ function Projects() {
   const aboutPage = useAboutContent();
   const isMobile = useIsMobile()
   const { width, height } = useBookSize();
+  console.log('Projects.jsx: width, height', width, height);
 
   const [activeSlug, setActiveSlug] = useState(getHashSlug)
   const [slideDirection, setSlideDirection] = useState('next')
